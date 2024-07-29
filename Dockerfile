@@ -8,4 +8,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 EXPOSE 5000
 
-CMD ["python", "wait_for_db.py", "db", "webshop_user", "yourpassword", "webshop", "python", "app.py"]
+CMD ["sh", "-c", "python wait_for_db.py db webshop_user yourpassword webshop && python app.py"]

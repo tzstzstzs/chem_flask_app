@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   web:
     build: .
@@ -12,6 +10,9 @@ services:
       - FLASK_RUN_HOST=0.0.0.0
       - FLASK_ENV=development
       - DATABASE_URL=mysql+pymysql://webshop_user:yourpassword@db/webshop
+    command: sh -c "python wait_for_db.py db webshop_user yourpassword webshop python app.py"
+    volumes:
+      - .:/code
 
   db:
     image: mysql:5.7
@@ -20,5 +21,14 @@ services:
       MYSQL_DATABASE: webshop
       MYSQL_USER: webshop_user
       MYSQL_PASSWORD: yourpassword
+      MYSQL_CHARSET: utf8mb4
+      MYSQL_COLLATION: utf8mb4_unicode_ci
     ports:
       - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./my.cnf:/etc/mysql/conf.d/my.cnf
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+
+volumes:
+  db_data:
